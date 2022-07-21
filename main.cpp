@@ -211,18 +211,16 @@ int main(int argc, char** argv) {
 	
 	bfs(img, w, h, c, shape, color, snum);
 
-	set <str> colors;
-	for (int i = 1; i <= snum; i++) colors.insert(color[i]);
-	
-	for (str col : colors) {
-		if (c == 4 && col[3] == 0) continue;
-		res += "<path " + colorize(col) + " d=\"";
-		for (int i = 1; i <= snum; i++) {
-			if (color[i] != col) continue; 
-			res += draw(img, w, h, c, shape[i], color[i] == col);
-		}
-		res += "\"/>\n";
+	map <str, str> colors;
+	for (int i = 1; i <= snum; i++) 
+		colors[color[i]] = "<path " + colorize(color[i]) + " d=\"";
+
+	for (int i = 1; i <= snum; i++) {
+		str col = color[i];
+		colors[col] += draw(img, w, h, c, shape[i], 1);
 	}
+	
+	for (auto x : colors) res += x.snd + "\"/>\n";
 
 	res += "</svg>";
 	cout << res << "\n";
